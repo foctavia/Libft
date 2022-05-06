@@ -11,10 +11,8 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-void	ft_strncpy(char **dest, const char *src, size_t size)
+static void	ft_strncpy(char **dest, const char *src, size_t size)
 {
 	size_t	i;
 
@@ -27,7 +25,7 @@ void	ft_strncpy(char **dest, const char *src, size_t size)
 	(*dest)[i] = '\0';
 }
 
-int	count_substr(const char *s, char c)
+static int	count_substr(const char *s, char c)
 {
 	int	i;
 	int	j;
@@ -50,31 +48,23 @@ int	count_substr(const char *s, char c)
 	return (count);
 }
 
-char	**free_str(char **str, int k)
+static char	**free_str(char **str, int k)
 {
 	while (k >= 0)
-		free (str[k--]);
+		free(str[k]);
 	free(str);
 	return (NULL);
 }
 
-char	**ft_split(char const *s, char c)
+static char	**fill_substr(char const *s, char c, char **str, int count)
 {
 	int		i;
 	int		j;
 	int		k;
-	int		count;
-	char	**str;
 
 	i = 0;
 	k = 0;
-	count = count_substr(s, c);
-	if (s[i] == '\0' || !s)
-		count = 0;
-	str = malloc (sizeof(char *) * (count + 1));
-	if (!str)
-		return (NULL);
-	while (s[i])
+	while (s[i] && k < count)
 	{
 		while (s[i] && s[i] == c)
 			i++;
@@ -90,13 +80,33 @@ char	**ft_split(char const *s, char c)
 	return (str);
 }
 
-// int	main(int argc, char **argv)
-// {
+char	**ft_split(char const *s, char c)
+{
+	int		i;
+	int		count;
+	char	**str;
+
+	i = 0;
+	if (!s || s[i] == '\0')
+		count = 0;
+	else
+		count = count_substr(s, c);
+	str = malloc (sizeof(char *) * (count + 1));
+	if (!str)
+		return (NULL);
+	str = fill_substr(s, c, str, count);
+	return (str);
+}
+
+//  int	main(int argc, char **argv)
+//  {
 // 	char	**new;
 // 	int	i;
 // 	int	count;
 
 // 	(void) argc;
+// 	if (argc != 3)
+// 		return (1);
 // 	i = 0;
 // 	new = ft_split(argv[1], argv[2][0]);
 // 	count = count_substr(argv[1], argv[2][0]);
@@ -106,6 +116,6 @@ char	**ft_split(char const *s, char c)
 // 		free (new[i]);
 // 		i++;
 // 	}
-// 	printf ("%d\n", count);
+// 	printf ("\ncount : %d\n", count);
 // 	free (new);
 // }

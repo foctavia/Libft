@@ -28,24 +28,32 @@ int	check_set(const char *s, char c)
 
 size_t	count_len(char const *s1, char const *set)
 {
-	int		i;
-	size_t	len;
+	size_t	i;
+	size_t	trim;
+	size_t	lensrc;
+	size_t	ttl_i;
 
 	i = 0;
-	len = 0;
-	while (s1[i])
+	lensrc = ft_strlen(s1);
+	ttl_i = lensrc - 1;
+	trim = 0;
+	while (s1[i] && check_set(set, s1[i]))
 	{
-		if (!check_set(set, s1[i]))
-			len++;
 		i++;
+		trim++;
 	}
-	return (len);
+	while (ttl_i > i && check_set(set, s1[ttl_i]))
+	{
+		trim++;
+		ttl_i--;
+	}
+	return (lensrc - trim);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	int		i;
-	int		j;
+	size_t	j;
 	size_t	len;
 	char	*new;
 
@@ -55,15 +63,21 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (s1[i])
+	while (s1[i] && check_set(set, s1[i]))
+		i++;
+	while (s1[i] && j < len)
 	{
-		if (!check_set(set, s1[i]))
-		{
-			new[j] = s1[i];
-			j++;
-		}
+		new[j] = s1[i];
+		j++;
 		i++;
 	}
 	new[j] = 0;
 	return (new);
 }
+
+// int	main(int argc, char **argv)
+// {
+// 	(void) argc;
+// 	printf ("%s\n", ft_strtrim(argv[1], argv[2]));
+// 	return (0);
+// }
