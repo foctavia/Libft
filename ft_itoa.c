@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int	nbrlen(int nbr)
+static int	nbrlen(int nbr)
 {
 	int			len;
 	long int	n;
@@ -32,7 +32,7 @@ int	nbrlen(int nbr)
 	return (len);
 }
 
-void	putnbr(int nbr, char *str, int i)
+static void	putnbr(int nbr, char *str, int i)
 {
 	long int	n;
 
